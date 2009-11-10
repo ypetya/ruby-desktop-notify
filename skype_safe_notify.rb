@@ -35,7 +35,10 @@ module SkypeNotify
 
   WMII_STATUS_FILENAME = "wmii_skype_info.log"
   TMP_FILENAME = "skype_say_safe"
+
+  # uncomment this if you do not use blogging url-s
   BLOG_NAME = 'csakacsuda'
+
   # do not try these urls
   NOT_VALID_URL = [ /local/, /http:\/\/[0-9\.]+[\/:]/, /private/, 
     /virgo/, /ypetya/, /admin/, /sandbox/, /szarka/, /netpincer/, 
@@ -57,11 +60,11 @@ module SkypeNotify
     THINGS_TO_DO = [:create_status_file_for_wmii, # => save the first 40 chars of message
                     :generate_voice,
                     :join_args_to_message, # => create
-										:get_links_to_blog, # => collect links, and replaye url-s in message text for better audio experience
+										:get_links_to_blog, # => collect links, and replace url-s in message text for better audio experience unless defined? BLOG_NAME
 										:generate_tmp_file_name, # => to avoid script injection
                     :save_message_to_file,
                     :call_speak_command,
-                    :put_links_to_blog,
+                    :put_links_to_blog, # => unless defined? BLOG_NAME
                     :remove_tmp_file
                    ]
 
@@ -124,6 +127,8 @@ module SkypeNotify
     end
 
     def get_links_to_blog
+      return unless defined? BLOG_NAME
+
       @new_links = []
       @new_links_html = []
       # collect links
@@ -156,8 +161,10 @@ module SkypeNotify
 
     # push link to blog
     def put_links_to_blog
+      @new_links_html ||= []      
       @new_links_html.each do |link|
         push_to_freeblog(@@settings[:freeblog].first,@@settings[:freeblog].last, simple_format(link))
+        push_to_newl( link )
       end
     end
 
@@ -179,6 +186,9 @@ module SkypeNotify
 
     # Create blog entry html : embed code or uri
     def simple_format link
+      
+      link = resolve_url link
+
       link_as_html = %{<a href="#{link}">#{link}</a>}
 
       if embed_code = recognize_first_embed_video_code_at( link )
@@ -210,7 +220,27 @@ module SkypeNotify
       agent.submit(m.forms.first)
       puts 'freeblog -> OK'
     end
+
+    def resolve_url(uri_str, limit = 10)
+      # You should choose better exception.
+      raise ArgumentError, 'HTTP redirect too deep' if limit == 0
+      response = Net::HTTP.get_response(URI.parse(uri_str))
+      case response
+        when Net::HTTPRedirection then resolve_url(response['location'], limit - 1)
+        else uri_str
+      end
+    end
+
+    # my special log
+    def push_to_newl link
+      agent, agent.user_agent_alias, agent.redirect_ok = WWW::Mechanize.new, 'Linux Mozilla', true
+      f = agent.get("http://91.120.21.19/?channel=8").forms.first
+      f.text = resolve_url( link )
+      f.submit
+    rescue
+    end
   end
+
 
 end
 
