@@ -224,9 +224,15 @@ module SkypeNotify
     def resolve_url(uri_str, limit = 10)
       # You should choose better exception.
       raise ArgumentError, 'HTTP redirect too deep' if limit == 0
-      response = Net::HTTP.get_response(URI.parse(uri_str))
+      uri = URI.parse(uri_str)
+      response = Net::HTTP.get_response( uri )
       case response
-        when Net::HTTPRedirection then resolve_url(response['location'], limit - 1)
+        when Net::HTTPRedirection 
+          location = response['location']
+          if URI.parse(location).relative?
+            location = "#{uri.scheme}://#{uri.host}:#{uri.port}#{location}"
+          end
+          resolve_url(location, limit - 1)
         else uri_str
       end
     end
