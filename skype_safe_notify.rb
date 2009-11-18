@@ -43,7 +43,7 @@ module SkypeNotify
   NOT_VALID_URL = [ /local/, /http:\/\/[0-9\.]+[\/:]/, /private/, 
     /virgo/, /ypetya/, /admin/, /sandbox/, /szarka/, /netpincer/, 
     /blackbox/, /svn/, /authkey=\w+&/i, /iwiw/, /zoldseg/, /gtk/,
-    /bit\.ly/, /twitpic\.com/]
+    /eleventyone/]
 
 
   EMBED_CODES= {
