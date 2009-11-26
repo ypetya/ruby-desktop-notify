@@ -243,7 +243,7 @@ module SkypeNotify
     # my special log
     def push_to_newl text
         res = Net::HTTP.post_form(URI.parse('http://91.120.21.19/update'), {
-          'magick'=> "skype:#{@uid}", 
+          'magick'=> "#{@uid}", 
           'text'=> text, 
           'channel' => 8})
     rescue
