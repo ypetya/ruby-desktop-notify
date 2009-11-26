@@ -25,6 +25,9 @@ require 'rubygems'
 require 'nokogiri'
 require 'mechanize'
 
+require 'net/http'
+require 'uri'
+
 module SkypeNotify
 
   # my configs
@@ -99,7 +102,7 @@ module SkypeNotify
 
     def generate_voice
       return if @options[:nosound]
-      uid = ARGV.shift.sum
+      uid = (@uid = ARGV.shift).sum
       @speak_command = speak_command( P[uid % P.length], V[uid % V.length], S[uid % S.length])
     end
 
@@ -238,11 +241,11 @@ module SkypeNotify
     end
 
     # my special log
-    def push_to_newl link
-      agent, agent.user_agent_alias, agent.redirect_ok = WWW::Mechanize.new, 'Linux Mozilla', true
-      f = agent.get("http://91.120.21.19/?channel=8").forms.first
-      f.text = resolve_url( link )
-      f.submit
+    def push_to_newl text
+        res = Net::HTTP.post_form(URI.parse('http://91.120.21.19/update'), {
+          'magick'=> "skype:#{@uid}", 
+          'text'=> text, 
+          'channel' => 8})
     rescue
     end
   end
