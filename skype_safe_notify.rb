@@ -222,6 +222,8 @@ module SkypeNotify
       m.forms.first.fields.select{ |f| f.name =~ /CONTENT/ }.first.value = message
       agent.submit(m.forms.first)
       puts 'freeblog -> OK'
+    rescue Exception => e
+      puts "freeblog -> ERROR (#{e.message})"
     end
 
     def resolve_url(uri_str, limit = 10)
