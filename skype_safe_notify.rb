@@ -48,6 +48,15 @@ module SkypeNotify
     /blackbox/, /svn/, /authkey=\w+&/i, /iwiw/, /zoldseg/, /gtk/,
     /eleventyone/, /deep-river/]
 
+  # replace emoticons
+  EMOTIES = { %r{:-{0,1}\)+} => 'mosolyog! ',
+    %r{:-{0,1}/} => 'húzza a száját! ',
+    %r{:-{0,1}\(+} => 'szomorú! ',
+    %r{:-{0,1}D+} => 'vigyorog! ',
+    %r{:-{0,1}[Pp]+} => 'nyelvet ölt! ',
+    %r{\W[iI][dD]\W*} => 'ídé. '
+  }
+
 
   EMBED_CODES= {
     :vimeo => {:get_id => /http:\/\/(www\.){0,1}vimeo\.com\/(.*)$/,
@@ -64,6 +73,7 @@ module SkypeNotify
                     :generate_voice,
                     :join_args_to_message, # => create
 										:get_links_to_blog, # => collect links, and replace url-s in message text for better audio experience unless defined? BLOG_NAME
+                    :replace_emoticons,
 										:generate_tmp_file_name, # => to avoid script injection
                     :save_message_to_file,
                     :call_speak_command,
@@ -126,6 +136,16 @@ module SkypeNotify
     def save_message_to_file
       File.open(@tmp_file,'w') do |f|
         f.puts @message
+      end
+    end
+
+    def replace_emoticons
+      return unless defined? EMOTIES
+      
+      EMOTIES.each do |regex,text_value|
+        @message = @message.gsub(regex) do 
+          text_value
+        end
       end
     end
 
