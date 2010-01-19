@@ -55,7 +55,12 @@ module SkypeNotify
     %r{:-{0,1}D+} => 'vigyorog! ',
     %r{:-{0,1}[Pp]+} => 'nyelvet ölt! ',
     %r{\W[iI][dD]$} => 'ídé. ',
-    %r{\W[iI][dD]\W} => 'ídé '
+    %r{\W[iI][dD]\W} => 'ídé ',
+    %r{(giggle)} => 'hümmög',
+    %r{\Wjazz\W} => 'dzsezz',
+    %r{(heidy)} => 'mókus',
+    %r{(poolparty)} => 'medencés parti',
+    %r{LOL} => 'kacag'
   }
 
 
