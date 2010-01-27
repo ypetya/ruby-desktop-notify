@@ -60,7 +60,9 @@ module SkypeNotify
     %r{\Wjazz\W} => 'dzsezz',
     %r{(heidy)} => 'mókus',
     %r{(poolparty)} => 'medencés parti',
-    %r{LOL} => 'kacag'
+    %r{LOL} => 'kacag',
+    %r{;-{0,1})} => 'kacsint',
+    %r{(sun)} => 'napsütés',
   }
 
 
