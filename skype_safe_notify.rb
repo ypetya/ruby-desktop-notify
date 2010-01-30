@@ -77,17 +77,18 @@ module SkypeNotify
 
   class Runner
 
+    # you can disable functions here..
     THINGS_TO_DO = [:create_status_file_for_wmii, # => save the first 40 chars of message
-                    :generate_voice,
-                    :join_args_to_message, # => create
-										:get_links_to_blog, # => collect links, and replace url-s in message text for better audio experience unless defined? BLOG_NAME
-                    :replace_emoticons,
-										:generate_tmp_file_name, # => to avoid script injection
-                    :save_message_to_file,
-                    :call_speak_command,
-                    :put_links_to_blog, # => unless defined? BLOG_NAME
-                    :remove_tmp_file
-                   ]
+      :generate_voice, # => it creates a voice setup for espeak for the first arg
+      :join_args_to_message, # => creates the message text
+      :get_links_to_blog, # => collect links, and replace url-s in message text for better audio experience unless defined? BLOG_NAME
+      :replace_emoticons, # => its the trick to listen emotes
+      :generate_tmp_file_name, # => to avoid script injection
+      :save_message_to_file, 
+      :call_speak_command, # => if it is enabled, it will listen up message
+      :put_links_to_blog, # => unless defined? BLOG_NAME
+      :remove_tmp_file
+    ]
 
     def initialize
       @options = { }
@@ -190,18 +191,19 @@ module SkypeNotify
       system "#{@speak_command} #{@tmp_file}" if @speak_command
     end
 
+    # {{{ blog section
     # push link to blog
     def put_links_to_blog
       @new_links_html ||= []      
       @new_links_html.each do |link|
-        push_to_freeblog(@@settings[:freeblog].first,@@settings[:freeblog].last, simple_format(link))
+        # push_to_freeblog(@@settings[:freeblog].first,@@settings[:freeblog].last, simple_format(link))
         push_to_newl( link )
       end
     end
 
     # -- HELPERS --
 
-    # TODO: not working, yet
+    # TODO: not working yet
     # find embed codes in foreign pages.
     def recognize_first_embed_video_code_at link
       return nil
@@ -278,6 +280,8 @@ module SkypeNotify
           'channel' => 8})
     rescue
     end
+    # }}}
+
   end
 
 
