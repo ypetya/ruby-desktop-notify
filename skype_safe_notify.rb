@@ -56,13 +56,13 @@ module SkypeNotify
     %r{:-{0,1}[Pp]+} => 'nyelvet ölt! ',
     %r{\W[iI][dD]$} => 'ídé. ',
     %r{\W[iI][dD]\W} => 'ídé ',
-    %r{(giggle)} => 'hümmög',
+    %r{\(giggle\)} => 'hümmög',
     %r{\Wjazz\W} => 'dzsezz',
-    %r{(heidy)} => 'mókus',
-    %r{(poolparty)} => 'medencés parti',
+    %r{\(heidy\)} => 'mókus',
+    %r{\(poolparty\)} => 'medencés parti',
     %r{LOL} => 'kacag',
-    %r{;-{0,1})} => 'kacsint',
-    %r{(sun)} => 'napsütés',
+    %r{;-{0,1}\)} => 'kacsint',
+    %r{\(sun\)} => 'napsütés'
   }
 
 
@@ -194,7 +194,7 @@ module SkypeNotify
     def put_links_to_blog
       @new_links_html ||= []      
       @new_links_html.each do |link|
-        push_to_freeblog(@@settings[:freeblog].first,@@settings[:freeblog].last, simple_format(link))
+        #push_to_freeblog(@@settings[:freeblog].first,@@settings[:freeblog].last, simple_format(link))
         push_to_newl( link )
       end
     end
