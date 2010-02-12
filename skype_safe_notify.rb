@@ -49,7 +49,9 @@ module SkypeNotify
     /eleventyone/, /deep-river/]
 
   # replace emoticons
-  EMOTIES = { %r{:-{0,1}\)+} => 'mosolyog! ',
+  EMOTIES = { 
+    %r{:-{0,1}\)+} => 'mosolyog! ',
+    %r{8-{0,1}\)+} => 'napszemüveg! ',
     %r{:-{0,1}/} => 'húzza a száját! ',
     %r{:-{0,1}\(+} => 'szomorú! ',
     %r{:-{0,1}D+} => 'vigyorog! ',
@@ -62,7 +64,9 @@ module SkypeNotify
     %r{\(poolparty\)} => 'medencés parti',
     %r{LOL} => 'kacag',
     %r{;-{0,1}\)} => 'kacsint',
-    %r{\(sun\)} => 'napsütés'
+    %r{\(sun\)} => 'napsütés',
+    %r{\(coffee\)} => 'kávé',
+    %r{\(rain\)} => 'eső'
   }
 
 
