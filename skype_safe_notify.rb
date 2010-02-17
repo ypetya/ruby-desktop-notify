@@ -46,7 +46,7 @@ module SkypeNotify
   NOT_VALID_URL = [ /local/, /http:\/\/[0-9\.]+[\/:]/, /private/, 
     /virgo/, /ypetya/, /admin/, /sandbox/, /szarka/, /netpincer/, 
     /blackbox/, /svn/, /authkey=\w+&/i, /iwiw/, /zoldseg/, /gtk/,
-    /eleventyone/, /deep-river/, /zanz.*itori/]
+    /eleventyone/, /deep-river/, /zanz.*itori/, /^http[s]*:\/\/\s*$/]
 
   # replace emoticons
   EMOTIES = { 
