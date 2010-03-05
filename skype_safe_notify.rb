@@ -87,6 +87,7 @@ module SkypeNotify
       :join_args_to_message, # => creates the message text
       :get_links_to_blog, # => collect links, and replace url-s in message text for better audio experience unless defined? BLOG_NAME
       :replace_emoticons, # => its the trick to listen emotes
+      :kalmanp_filter, # => This is becouse I have a firend, who writes a lot dot's in his texts....
       :generate_tmp_file_name, # => to avoid script injection
       :save_message_to_file, 
       :call_speak_command, # => if it is enabled, it will listen up message
@@ -150,6 +151,16 @@ module SkypeNotify
       File.open(@tmp_file,'w') do |f|
         f.puts @message
       end
+    end
+
+    # transform all repeated markers into single
+    def kalmanp_filter
+      r = /  /
+      @message = @message.gsub(r){ ' ' } while @message =~ r
+      r = /\s([!?.,;:]{1,1})/
+      @message = @message.gsub(r){ $1 } while @message =~ r
+      r = /([!?.,;:]{2,2})/
+      @message = @message.gsub(r){ $1.split('').first } while @message =~ r
     end
 
     def replace_emoticons
